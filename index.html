@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -112,6 +113,7 @@
         }
     </style>
 </head>
+
 <body>
 <div class="center">
     <h2>refresh_token To Access Token</h2>
@@ -145,11 +147,28 @@
         const tokenText = tokenElement.innerText.trim();
 
         navigator.clipboard.writeText(tokenText).then(() => {
-            alert('Access Token 已复制到剪贴板');
+            // alert('Access Token 已复制到剪贴板');
+            // 改为右上角的日志悬浮提示
+            const log = document.createElement('div');
+            log.style.position = 'fixed';
+            log.style.top = '10px';
+            log.style.right = '10px';
+            log.style.padding = '10px 20px';
+            log.style.borderRadius = '8px';
+            log.style.backgroundColor = '#4CAF50';
+            log.style.color = 'white';
+            log.style.zIndex = '9999';
+            log.innerText = 'Access Token 已复制到剪贴板';
+            document.body.appendChild(log);
+            setTimeout(() => {
+                document.body.removeChild(log);
+            }, 3000);
+
         }).catch(err => {
             console.error('无法复制文本: ', err);
         });
     }
 </script>
 </body>
+
 </html>
