@@ -56,8 +56,8 @@
             color: #aaa;
         }
 
-        .input-wrapper input:focus + label,
-        .input-wrapper input:not(:placeholder-shown) + label {
+        .input-wrapper input:focus+label,
+        .input-wrapper input:not(:placeholder-shown)+label {
             top: -8px;
             left: 15px;
             font-size: 14px;
@@ -111,64 +111,73 @@
         #copyButton:hover {
             background-color: #45a049;
         }
+
+        .tip {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
     </style>
 </head>
 
 <body>
-<div class="center">
-    <h2>refresh_token To Access Token</h2>
-    <form id="tokenForm">
-        <div class="input-wrapper">
-            <input type="text" id="refresh_token" name="refresh_token" placeholder=" " required>
-            <label for="refresh_token">Refresh Token</label>
-        </div>
-        <button type="button" onclick="getToken()">Get Access Token</button>
-    </form>
-    <div id="access_token"></div>
-    <button id="copyButton" style="display: none;" onclick="copyToken()">复制 Access Token</button>
-</div>
-<script>
-    async function getToken() {
-        const refreshToken = document.getElementById('refresh_token').value;
-        const response = await fetch('https://token.oaifree.com/api/auth/refresh', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-            },
-            body: `refresh_token=${encodeURIComponent(refreshToken)}`
-        });
-        const result = await response.json();
-        document.getElementById('access_token').innerText = result.access_token;
-        document.getElementById('copyButton').style.display = 'block';
-    }
+    <div class="center">
+        <h2>refresh_token To Access Token</h2>
+        <form id="tokenForm">
+            <div class="input-wrapper">
+                <input type="text" id="refresh_token" name="refresh_token" placeholder=" " required>
+                <label for="refresh_token">Refresh Token</label>
+            </div>
+            <button type="button" onclick="getToken()">Get Access Token</button>
+        </form>
+        <div id="access_token"></div>
+        <button id="copyButton" style="display: none;" onclick="copyToken()">复制 Access Token</button>
+        <div class="tip">如果你想复制本站可直接Ctrl+s保存即可，或打开<a rel="noopener"
+                href="https://github.com/xiaoye6688/refresh_token-To-Access-Token"
+                target="_blank">GitHub</a>下载index.html文件亦可。</div>
+    </div>
+    <script>
+        async function getToken() {
+            const refreshToken = document.getElementById('refresh_token').value;
+            const response = await fetch('https://token.oaifree.com/api/auth/refresh', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                },
+                body: `refresh_token=${encodeURIComponent(refreshToken)}`
+            });
+            const result = await response.json();
+            document.getElementById('access_token').innerText = result.access_token;
+            document.getElementById('copyButton').style.display = 'block';
+        }
 
-    function copyToken() {
-        const tokenElement = document.getElementById('access_token');
-        const tokenText = tokenElement.innerText.trim();
+        function copyToken() {
+            const tokenElement = document.getElementById('access_token');
+            const tokenText = tokenElement.innerText.trim();
 
-        navigator.clipboard.writeText(tokenText).then(() => {
-            // alert('Access Token 已复制到剪贴板');
-            // 改为右上角的日志悬浮提示
-            const log = document.createElement('div');
-            log.style.position = 'fixed';
-            log.style.top = '10px';
-            log.style.right = '10px';
-            log.style.padding = '10px 20px';
-            log.style.borderRadius = '8px';
-            log.style.backgroundColor = '#4CAF50';
-            log.style.color = 'white';
-            log.style.zIndex = '9999';
-            log.innerText = 'Access Token 已复制到剪贴板';
-            document.body.appendChild(log);
-            setTimeout(() => {
-                document.body.removeChild(log);
-            }, 3000);
+            navigator.clipboard.writeText(tokenText).then(() => {
+                // alert('Access Token 已复制到剪贴板');
+                // 改为右上角的日志悬浮提示
+                const log = document.createElement('div');
+                log.style.position = 'fixed';
+                log.style.top = '10px';
+                log.style.right = '10px';
+                log.style.padding = '10px 20px';
+                log.style.borderRadius = '8px';
+                log.style.backgroundColor = '#4CAF50';
+                log.style.color = 'white';
+                log.style.zIndex = '9999';
+                log.innerText = 'Access Token 已复制到剪贴板';
+                document.body.appendChild(log);
+                setTimeout(() => {
+                    document.body.removeChild(log);
+                }, 3000);
 
-        }).catch(err => {
-            console.error('无法复制文本: ', err);
-        });
-    }
-</script>
+            }).catch(err => {
+                console.error('无法复制文本: ', err);
+            });
+        }
+    </script>
 </body>
 
 </html>
